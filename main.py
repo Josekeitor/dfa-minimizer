@@ -1,10 +1,45 @@
-# This is a sample Python script.
+'''DFA minimizer
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+This is a script to minimize a nested dictionary representation of a DFA, as well as to process strings
+in the dfa.
+
+This script accepts external .txt files formated in the following manner:
+
+    - The first line indicates the set of states of the automata separated by commas. - The second line indicates the alphabet symbols separated by commas
+
+    - The third line indicates the initial state
+
+    - The fourth line indicates the set of final states separated by commas.
+
+    - The following lines indicate the evaluation of the extended transition function with the elements of the alphabet in the following format:\n
+
+
+    state, symbol = > state
+
+    Example, the following line:\n
+    q0, a = > q1 \n
+    indicates that the DFA processes the following: d(q0,a) = q1
+
+
+
+
+'''
 import copy
 
 def processString(dfa, string):
+    """
+    Function to process a given string in the DFA
+
+    Parameters:
+    ---------------
+    dfa (dict(dict())): A nested dictionary representation of a DFA
+    string (str) : The string to process
+
+    Returns:
+    ---------------
+    bool: Wether the string was accepted or not
+
+      """
     count = 0
     q = [initial]
     while q:
@@ -23,14 +58,38 @@ def processString(dfa, string):
         count += 1
     return False
 
-def changeName(dfa, state, newState):
+def changeName(dfa, state, new_state):
+    """
+       Function to rename dfa states while minimizing
+
+       Parameters:
+       ---------------
+       dfa (dict(dict())): A nested dictionary representation of a DFA \n
+       state (str): The state to rename \n
+       new_state (str): The new name of the state
+
+       Returns:
+       ---------------
+       None
+         """
     for element in dfa:
         for letter in dfa[element]:
             if state == dfa[element][letter]:
-                dfa[element].update({letter : newState})
+                dfa[element].update({letter : new_state})
 
 
 def minimize(dfa):
+    """
+           Function to minimize a DFA
+
+           Parameters:
+           ---------------
+           dfa (dict(dict())): A nested dictionary representation of a DFA \n
+
+           Returns:
+           ---------------
+           min_dfa (dict(dict())): A nested dictionary representation of a minimized DFA
+             """
     deleted = []
     min_dfa = copy.deepcopy(dfa)
     changed = True
@@ -69,7 +128,6 @@ def minimize(dfa):
 
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
     path = 'Files/test2.txt'
@@ -112,5 +170,3 @@ if __name__ == '__main__':
         print("Accepted")
     else:
         print("Not accepted")
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
