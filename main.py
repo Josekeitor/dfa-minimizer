@@ -84,12 +84,12 @@ def changeName(dfa, state, new_state):
        None
          """
     #For every state in DFA
-    for state in dfa:
+    for element in dfa:
         #For every transition
-        for letter in dfa[state]:
+        for letter in dfa[element]:
             #If the state we are renaming is a result from any transition, change its name to the new state
-            if state == dfa[state][letter]:
-                dfa[state].update({letter : new_state})
+            if state == dfa[element][letter]:
+                dfa[element].update({letter : new_state})
 
 
 def minimize(dfa):
@@ -130,6 +130,7 @@ def minimize(dfa):
                                     if one_state in initial:
                                         print("state to delete: ", another_state)
                                         del min_dfa[another_state]
+                                        changeName(min_dfa, another_state, one_state)
                                         if another_state in final:
                                             final.remove(another_state)
                                     elif another_state in initial:
@@ -137,12 +138,13 @@ def minimize(dfa):
                                         if one_state in final:
                                             final.remove(one_state)
                                         del min_dfa[one_state]
+                                        changeName(min_dfa, one_state, another_state)
                                     else:
                                         print("state to delete: ", another_state)
                                         if another_state in final:
                                             final.remove(another_state)
                                         del min_dfa[another_state]
-                                    changeName(min_dfa, another_state, one_state)
+                                        changeName(min_dfa, another_state, one_state)
 
     return min_dfa
 
@@ -150,7 +152,7 @@ def minimize(dfa):
 
 if __name__ == '__main__':
     #Get the path to the file where the DFA description is contained
-    path = 'Files/test2.txt'
+    path = 'Files/test1.txt'
     file = open(path, 'r')
     #Initialize the DFA
     dfa = dict(dict())
